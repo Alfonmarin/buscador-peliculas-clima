@@ -43,13 +43,14 @@ Según el tipo de clima detectado (despejado, lluvia, nieve, etc.), el sistema a
 ---
 
 ## 🤖 Funcionamiento de agentes
-El sistema se basa en una **arquitectura multi-agente** implementada con **JADE**, donde cada agente tiene un rol definido y se comunican mediante mensajes **FIPA-ACL** (REQUEST / INFORM / QUERY).
+El sistema se basa en una **arquitectura multi-agente** implementada con **JADE**, donde cada agente tiene un rol definido y se comunican mediante mensajes **FIPA-ACL** (*REQUEST*, *INFORM*, *QUERY*).
 
 ```mermaid
 graph TD
-A[AgenteInterfazUsuario (IA)] -->|REQUEST| B[AgenteRecomendador]
+A("AgenteInterfazUsuario (IA)") -->|REQUEST| B("AgenteRecomendador")
 B -->|INFORM| A
-B -->|REQUEST| C[AgenteAdquisicionDatosPeliculas (MDAA)]
+B -->|REQUEST| C("AgenteAdquisicionDatosPeliculas (MDAA)")
 C -->|INFORM| B
-B -->|QUERY| D[AgenteInteligente]
+B -->|QUERY| D("AgenteInteligente")
 D -->|INFORM| B
+
