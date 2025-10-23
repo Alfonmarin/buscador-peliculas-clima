@@ -20,11 +20,16 @@ Según el tipo de clima detectado (despejado, lluvia, nieve, etc.), el sistema a
 ---
 
 ## 🧱 Estructura del proyecto
-| Módulo / Carpeta | Descripción destacada |
+| Carpeta / Módulo | Descripción destacada |
 |------------------|-----------------------|
-| **`src/es/upm/filmrecommender`** | Código fuente principal del sistema y de la interfaz gráfica. |
-| **`jars/`** | Librerías externas necesarias: `gson-2.10.1.jar`, `jade.jar`. |
-| **`MainLauncher.java`** | Clase principal que lanza el sistema y los agentes inteligentes. |
+| **`src/es/upm/filmrecommender/agents`** | Contiene los **agentes principales del sistema**, incluyendo: <br>• `AgenteRecomendador.java` – coordina las peticiones y respuestas entre los demás agentes. <br>• `AgenteInterfazUsuario.java` – gestiona la comunicación con la interfaz gráfica. <br>• `AgenteInteligente.java` – aplica la lógica de recomendación según el clima. <br>• `AgenteAdquisicionDatosPeliculas.java` – obtiene datos desde la API de películas. |
+| **`src/es/upm/filmrecommender/data`** | Gestión de los datos y preferencias del usuario: <br>• `Movie.java`, `UserPreferences.java`, `HistorialVistosManager.java`. |
+| **`src/es/upm/filmrecommender/gui`** | Interfaz gráfica del sistema: <br>• `RecommenderGui.java` implementa la ventana principal para búsqueda y visualización de recomendaciones. |
+| **`src/es/upm/filmrecommender/utils`** | Clases auxiliares y de conexión con APIs: <br>• `ClimaClient.java` (API clima), `TMDBApiClient.java` (API películas). |
+| **`MainLauncher.java`** | Punto de entrada del programa; inicializa los agentes y lanza la interfaz. |
+| **`jars/`** | Librerías externas necesarias: `gson-2.10.1.jar` y `jade.jar`. |
+| **`instrucciones_SSII.pdf`** | Documento con las instrucciones oficiales de ejecución del proyecto. |
+
 
 ---
 
@@ -37,10 +42,14 @@ Según el tipo de clima detectado (despejado, lluvia, nieve, etc.), el sistema a
 
 ---
 
-## 🧮 Flujo de funcionamiento
+## 🤖 Funcionamiento de agentes
+El sistema se basa en una **arquitectura multi-agente** implementada con **JADE**, donde cada agente tiene un rol definido y se comunican mediante mensajes **FIPA-ACL** (REQUEST / INFORM / QUERY).
+
 ```mermaid
 graph TD
-A[API de Clima] --> B[Identificación del tipo de clima]
-B --> C[Asignación de géneros recomendados]
-C --> D[Consulta a la API de Películas]
-D --> E[Filtrado por rating y visualización en la interfaz gráfica]
+A[AgenteInterfazUsuario (IA)] -->|REQUEST| B[AgenteRecomendador]
+B -->|INFORM| A
+B -->|REQUEST| C[AgenteAdquisicionDatosPeliculas (MDAA)]
+C -->|INFORM| B
+B -->|QUERY| D[AgenteInteligente]
+D -->|INFORM| B
